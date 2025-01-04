@@ -20,6 +20,20 @@ predictions=tree_model.predict(X_test)
 accuracy=accuracy_score(y_test,predictions)
 conf_matrix=confusion_matrix(y_test,predictions)
 report=classification_report(y_test,predictions)
+x_min,x_max=data[:,0].min()-1,data[:,0].max()+1
+y_min,y_max=data[:, 1].min()-1,data[:,1].max()+1
+xx,yy=np.meshgrid(np.arange(x_min,x_max,0.01),np.arange(y_min,y_max,0.01))
+
+Z=tree_model.predict(np.c_[xx.ravel(),yy.ravel()])
+Z=Z.reshape(xx.shape)
+
+plt.figure(figsize=(8,6))
+plt.contourf(xx,yy,Z,alpha=0.8,cmap=plt.cm.Paired)
+plt.scatter(data[:,0],data[:,1],c=labels,edgecolors='k',cmap=plt.cm.Paired)
+plt.title("decision tree decision boundary")
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
 print(f"Accuracy :{accuracy:.2f}")
 print(f"confusion Matrix:")
 print(conf_matrix)
